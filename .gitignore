@@ -1,0 +1,21 @@
+# Dependencias
+node_modules/
+.angular/
+
+# IDEs y Sistema
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Docker y Base de Datos
+# Ignoramos la carpeta donde Docker guarda físicamente los datos de MySQL
+database_data/ 
+
+# Compilación
+dist/
+/bazel-out
+
+# PHP especifico
+vendor/
+.env

@@ -1,0 +1,17 @@
+services:
+  # Definimos el servicio para el código PHP
+  servidor-web:
+    build: ./backend
+    ports:
+      - "8080:80"  # Veremos la web en http://localhost:8080
+    volumes:
+      - ./backend:/var/www/html  # Permite ver cambios en el código sin reiniciar Docker
+
+  # Definimos el servicio para la Base de Datos MySQL 
+  base-datos:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: restaurante_db
+    ports:
+      - "3306:3306"
