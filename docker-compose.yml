@@ -12,6 +12,8 @@ services:
     image: mysql:8.0
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: restaurante_db
+      MYSQL_DATABASE: tfgDAW2526
     ports:
       - "3306:3306"
+    volumes:
+      - ./database:/docker-entrypoint-initdb.d
