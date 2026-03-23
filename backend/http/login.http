@@ -1,0 +1,7 @@
+POST http://localhost:8080/index.php
+Content-Type: application/json
+
+{
+  "email": "admin@mitfg.com",
+  "password": "1234"
+}
