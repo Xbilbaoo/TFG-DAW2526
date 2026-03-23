@@ -4,15 +4,15 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-require_once __DIR__ . '/../src/Models/Connection.php';
+require_once __DIR__ . '/../src/Config/Database.php';
 
-use Models\Connection;
+use Config\Database;
 
 header('Content-Type: application/json; charset=utf-8');
 
 try {
 
-    $isConnected = Connection::testConnection();
+    $isConnected = Database::testConnection();
 
     if ($isConnected) {
         http_response_code(200);
@@ -22,7 +22,7 @@ try {
         ]);
     } else {
         http_response_code(500);
-        $db = Connection::getInstance();
+        $db = Database::getInstance();
         echo json_encode([
             "status" => "error",
             "message" => "No se pudo conectar a la base de datos.",

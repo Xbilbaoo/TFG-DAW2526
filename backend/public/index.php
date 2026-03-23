@@ -16,15 +16,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 // 1. Requerimos las clases manualmente por hoy
-require_once __DIR__ . '/../src/Models/Connection.php';
+require_once __DIR__ . '/../src/Config/Database.php';
 require_once __DIR__ . '/../src/Models/User.php';
 require_once __DIR__ . '/../src/Controllers/AuthController.php';
 
 // 2. Leemos qué URL nos están pidiendo
-$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$url = parse_url($_SERVER['REQUEST_URL'], PHP_URL_PATH);
 
 // 3. Enrutador muy simple
-if ($uri === '/login' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($url === '/login' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     $controller = new \Controllers\AuthController();
     $controller->login();
 } else {
