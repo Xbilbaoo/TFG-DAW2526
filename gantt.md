@@ -1,13 +1,4 @@
----
-config:
-  theme: neo
-  gantt:
-    barHeight: 22
-    barGap: 5
-    topPadding: 50
-    sectionFontSize: 14
-    fontSize: 12
----
+```mermaid
 gantt
     dateFormat  YYYY-MM-DD
     axisFormat  %d/%m
@@ -21,7 +12,7 @@ gantt
     Diagrama de Gantt          :done, 2026-03-13, 2026-03-15
 
     section Segundo Control - 17 Abr
-    Diseño BD                  :2026-03-16, 2026-03-22
+    Diseno BD                  :2026-03-16, 2026-03-22
     Setup PHP y MySQL          :2026-03-22, 2026-03-30
     API Auth                   :2026-03-30, 2026-04-05
     API Menu y Categorias      :2026-04-05, 2026-04-10
@@ -38,3 +29,4 @@ gantt
     Deploy Render y Vercel     :2026-05-15, 2026-05-20
     Conclusiones               :2026-05-18, 2026-05-25
     Preparacion presentacion   :2026-05-25, 2026-05-31
+```
