@@ -35,4 +35,11 @@ class User
         return false;
     }
 
+    public static function createUser($userData) {
+
+        $connectionInstance = Database::getInstance();
+        $connection = $connectionInstance->getConnection();
+        $stmt = $connection->prepare('INSERT INTO users (email, password_hash, ) VALUES (?, ?)');
+    }
+
 }
