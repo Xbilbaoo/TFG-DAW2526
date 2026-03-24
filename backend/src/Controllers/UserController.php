@@ -2,12 +2,11 @@
 
 namespace Controllers;
 
-use Config\Database;
 use Models\User;
 
+require_once __DIR__ . '/../Models/User.php';
 class UserController
 {
-
     public function create()
     {
 
@@ -34,7 +33,7 @@ class UserController
                     'password' => $input['password'],
                     'role' => $input['role'],
                     'restaurant_id' => $input['restaurant_id'],
-                    'avartar_url' => $input['avartar_url'] ?? null
+                    'avatar_url' => $input['avatar_url'] ?? null
                 ];
 
                 $isStored = User::createUser($cleanInput);

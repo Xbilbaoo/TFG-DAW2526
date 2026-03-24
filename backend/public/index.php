@@ -65,7 +65,7 @@ switch ($resource) {
             case 'POST':
 
                 $controller = new UserController();
-                $controller::create();
+                $controller->create();
                 break;
 
             case 'GET':
