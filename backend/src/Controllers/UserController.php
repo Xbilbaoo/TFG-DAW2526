@@ -19,7 +19,6 @@ class UserController
 
             http_response_code(400);
             echo json_encode(['success' => false, 'message' => 'Bad request.']);
-            exit;
 
         } else {
 
@@ -27,7 +26,6 @@ class UserController
 
                 http_response_code(400);
                 echo json_encode(['success' => false, 'message' => 'Bad request.']);
-                exit;
 
             } else {
 
@@ -35,7 +33,8 @@ class UserController
                     'email' => $input['email'],
                     'password' => $input['password'],
                     'role' => $input['role'],
-                    'restaurant_id' => $input['restaurant_id']
+                    'restaurant_id' => $input['restaurant_id'],
+                    'avartar_url' => $input['avartar_url'] ?? null
                 ];
 
                 $isStored = User::createUser($cleanInput);
@@ -49,11 +48,13 @@ class UserController
 
                     http_response_code(500);
                     echo json_encode(['success' => false, 'message' => 'Error al crear usuario.']);
+
                 }
-                exit;
+
             }
 
-
         }
+
+        exit;
     }
 }

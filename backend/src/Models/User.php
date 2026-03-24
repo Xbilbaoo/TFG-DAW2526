@@ -35,11 +35,22 @@ class User
         return false;
     }
 
-    public static function createUser($userData) {
+    public static function createUser($userData): bool
+    {
 
         $connectionInstance = Database::getInstance();
         $connection = $connectionInstance->getConnection();
-        $stmt = $connection->prepare('INSERT INTO users (email, password_hash, ) VALUES (?, ?)');
+        $stmt = $connection->prepare('INSERT INTO users (email, password_hash, role, avatar_url, restaurant_id) VALUES (?,?,?,?,?)');
+
+        $password = password_hash($userData['password'], PASSWORD_DEFAULT);
+
+        $stmt->bind_param('ssssi', $userData['email'], $password, $userData['role'], $userData['avatar_url'], $userData['restaurant_id']);
+
+        $success = $stmt->execute();
+
+        $stmt->close();
+        return $success;
+
     }
 
 }
