@@ -2,8 +2,10 @@
 
 
 use Controllers\AuthController;
+use Controllers\UserController;
 
 require_once __DIR__ . '/../src/Controllers/AuthController.php';
+require_once __DIR__ . '/../src/Controllers/UserController.php';
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -42,9 +44,32 @@ switch ($resource) {
 
     case 'logout':
 
-        $controller = new AuthController();
-        $controller->logout();
+        if ($method === 'POST') {
+
+            $controller = new AuthController();
+            $controller->logout();
+
+        } else {
+
+            http_response_code(405);
+            echo json_encode(["message" => 'método incorrecto.']);
+
+        }
+
         break;
+
+    case 'users':
+
+        switch ($method) {
+
+            case 'POST':
+
+                $controller = new UserController();
+                $controller::create();
+                break;
+
+            case 'GET':
+        }
 
     default:
 

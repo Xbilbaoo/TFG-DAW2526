@@ -7,18 +7,11 @@ use Models\User;
 class AuthController
 {
 
-    public function login() {
+    public static function login() {
 
         require_once __DIR__ . '/../Models/User.php';
 
         header('Content-Type: application/json');
-
-
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            http_response_code(405); // 405 Method Not Allowed
-            echo json_encode(['success' => false, 'message' => 'Método no permitido. Se esperaba POST.']);
-            exit;
-        }
 
         $input = json_decode(file_get_contents('php://input'), true);
 
