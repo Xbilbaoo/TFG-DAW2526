@@ -5,8 +5,8 @@ namespace Controllers;
 use Models\User;
 use Services\JwtService;
 
-require_once __DIR__ . '../Models/User.php';
-require_once __DIR__ . '../Services/JwtService.php';
+require_once __DIR__ . '/../Models/User.php';
+require_once __DIR__ . '/../Services/JwtService.php';
 
 class AuthController
 {
@@ -50,7 +50,7 @@ class AuthController
                 http_response_code(401); // 401 Unauthorized
                 echo json_encode(['success' => false, 'message' => 'Credenciales incorrectas.']);
                 exit;
-                
+
             }
 
         } catch (Exception $e) {

@@ -1,0 +1,8 @@
+### POST request to login as restaurateur
+POST http://localhost:8080/login
+Content-Type: application/json
+
+{
+  "email": "user1@example1.com",
+  "password": "1234abcd"
+}

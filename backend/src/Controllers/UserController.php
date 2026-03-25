@@ -98,4 +98,9 @@ class UserController
         exit;
 
     }
+
+    public function updateWholeUser(string $id)
+    {
+
+    }
 }
