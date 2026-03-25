@@ -46,10 +46,29 @@ class User
 
         $stmt->bind_param('ssssi', $userData['email'], $password, $userData['role'], $userData['avatar_url'], $userData['restaurant_id']);
 
-        $success = $stmt->execute();
+        try {
+
+            $success = $stmt->execute();
+
+        } catch (\mysqli_sql_exception $e) {
+
+            error_log($e->getMessage());
+            $success = false;
+
+        }
 
         $stmt->close();
         return $success;
+
+    }
+
+    public static function updateUser(array $cleanInput)
+    {
+
+        $connectionInstance = Database::getInstance();
+        $connection = $connectionInstance->getConnection();
+
+        $stmt = $connection->prepare('UPDATE users SET email = ?, password_hash = ?, WHERE id = ?');
 
     }
 
