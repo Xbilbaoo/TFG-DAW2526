@@ -1,5 +1,6 @@
 ### PUT request with incorrect ID
 PUT http://localhost:8080/users/935
+Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzQ0NDgxMjYsImV4cCI6MTc3NDQ1NTMyNiwiZGF0YSI6eyJ1c2VyX2lkIjoyLCJlbWFpbCI6InVzZXJ0ZXN0QGV4YW1wbGUuY29tIiwicm9sZSI6ImFkbWluIn19.A2o_g7aRBodmCPdAl87jddcq6ioteFZufv9oG44uYWk
 
 {
   "email": "usertest@example.com",

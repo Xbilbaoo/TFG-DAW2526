@@ -106,6 +106,7 @@ switch ($resource) {
                     if ($userData['role'] === 'admin') {
 
                         $controller->updateWholeUser($id);
+
                     } else {
 
                         if ($userData['user_id'] !== $id) {
