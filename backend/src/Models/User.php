@@ -35,7 +35,7 @@ class User
         return false;
     }
 
-    public static function createUser($userData): bool
+    public static function createUser($userData): array
     {
 
         $connectionInstance = Database::getInstance();
@@ -47,18 +47,28 @@ class User
         $stmt->bind_param('ssssi', $userData['email'], $password, $userData['role'], $userData['avatar_url'], $userData['restaurant_id']);
 
         try {
-
-            $success = $stmt->execute();
+            $stmt->execute();
+            $stmt->close();
+            return ['success' => true, 'message' => 'Usuario creado correctamente.'];
 
         } catch (\mysqli_sql_exception $e) {
-
             error_log($e->getMessage());
-            $success = false;
+            $stmt->close();
 
+            if ($e->getCode() === 1062) {
+
+                return ['success' => false, 'message' => 'El email introducido ya está registrado.', 'http_code' => 400];
+
+            } elseif ($e->getCode() === 1452) {
+
+                return ['success' => false, 'message' => 'El restaurante seleccionado no existe.', 'http_code' => 400];
+
+            } else {
+
+                return ['success' => false, 'message' => 'Error interno en la base de datos.', 'http_code' => 500];
+
+            }
         }
-
-        $stmt->close();
-        return $success;
 
     }
 
@@ -68,8 +78,42 @@ class User
         $connectionInstance = Database::getInstance();
         $connection = $connectionInstance->getConnection();
 
-        $stmt = $connection->prepare('UPDATE users SET email = ?, password_hash = ?, WHERE id = ?');
+        $password = password_hash($cleanInput['password'], PASSWORD_DEFAULT);
+        $stmt = $connection->prepare('UPDATE users SET email = ?, password_hash = ?, avatar_url = ? WHERE user_id = ?');
 
+        $stmt->bind_param('sssi', $cleanInput['email'], $password, $cleanInput['avatar_url'], $cleanInput['id']);
+
+        try {
+
+            $stmt->execute();
+
+            if ($stmt->affected_rows === 0) {
+
+                return ['success' => false, 'message' => 'Usuario no encontrado.', 'http_code' => 404];
+
+            }
+
+            $stmt->close();
+            return ['success' => true, 'message' => 'Usuario actualizado correctamente.'];
+
+        } catch (\mysqli_sql_exception $e) {
+
+            error_log($e->getMessage());
+            $stmt->close();
+
+            if ($e->getCode() === 1062) {
+
+               return ['success' => false, 'message' => 'El email ya esta registrado.', 'http_code' => 400];
+
+            } elseif ($e->getCode() === 1452) {
+
+                return ['success' => false, 'message' => 'El restaurante seleccionado no existe.', 'http_code' => 400];
+            } else {
+
+                return ['success' => false, 'message' => 'Error interno en la base de datos.', 'http_code' => 500];
+
+            }
+        }
     }
 
 }

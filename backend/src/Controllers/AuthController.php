@@ -3,13 +3,16 @@
 namespace Controllers;
 
 use Models\User;
+use Services\JwtService;
+
+require_once __DIR__ . '../Models/User.php';
+require_once __DIR__ . '../Services/JwtService.php';
 
 class AuthController
 {
 
-    public static function login() {
-
-        require_once __DIR__ . '/../Models/User.php';
+    public static function login()
+    {
 
         header('Content-Type: application/json');
 
@@ -26,39 +29,20 @@ class AuthController
 
         try {
 
-            $userData = User::hasPermission($email, $password);
+            $user = User::hasPermission($email, $password);
 
-            if ($userData) {
+            if ($user) {
 
-                $header = json_encode(['alg' => 'HS256', 'typ' => 'JWT']);
+                $cleanPayload = [
+                    'user_id' => $user['user_id'],
+                    'email' => $user['email'],
+                    'role' => $user['role']
+                ];
 
-                $payload = json_encode([
-                    'id' => $userData['user_id'],
-                    'username' => $userData['email'],
-                    'role' => $userData['role'],
-                    'iat' => time(),
-                    'exp' => time() + 3600
-                ]);
-
-                $base64UrlHeader = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($header));
-                $base64UrlPayload = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($payload));
-
-                $secret = 'Clave_Secreta_TFG_2526';
-                $signature = hash_hmac('sha256', $base64UrlHeader . "." . $base64UrlPayload, $secret, true);
-                $base64UrlSignature = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($signature));
-
-                $token = $base64UrlHeader . "." . $base64UrlPayload . "." . $base64UrlSignature;
+                $token = JwtService::generateToken($cleanPayload);
 
                 http_response_code(200);
-                echo json_encode([
-                    'success' => true,
-                    'token' => $token,
-                    'user' => [
-                        'id' => $userData['user_id'],
-                        'username' => $userData['email'],
-                        'role' => $userData['role']
-                    ]
-                ]);
+                echo json_encode(['success' => true, 'token' => $token, 'user' => $cleanPayload]);
                 exit;
 
             } else {
@@ -66,6 +50,7 @@ class AuthController
                 http_response_code(401); // 401 Unauthorized
                 echo json_encode(['success' => false, 'message' => 'Credenciales incorrectas.']);
                 exit;
+                
             }
 
         } catch (Exception $e) {

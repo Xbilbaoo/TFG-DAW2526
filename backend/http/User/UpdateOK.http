@@ -1,0 +1,9 @@
+### PUT request with an existing user
+PUT http://localhost:8080/users/2
+
+{
+  "email": "usertest@example.com",
+  "password": "1234abcd",
+  "avatar_url": "hola.png"
+}
+###

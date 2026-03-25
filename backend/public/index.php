@@ -68,7 +68,16 @@ switch ($resource) {
                 $controller->create();
                 break;
 
-            case 'GET':
+            case 'PUT':
+
+                if ($id) {
+                    $controller = new UserController();
+                    $controller->updateWithoutRole($id);
+                } else {
+                    http_response_code(400);
+                    echo json_encode(['success' => false, 'message' => 'Falta el ID del usuario.']);
+                }
+                break;
         }
 
     default:

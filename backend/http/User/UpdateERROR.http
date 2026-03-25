@@ -1,0 +1,8 @@
+### PUT request with incorrect ID
+PUT http://localhost:8080/users/935
+
+{
+  "email": "usertest@example.com",
+  "password": "1234abcd",
+  "avatar_url": "hola.png"
+}

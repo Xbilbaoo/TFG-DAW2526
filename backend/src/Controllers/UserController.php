@@ -31,27 +31,22 @@ class UserController
 
             } else {
 
-                $cleanInput = [
-                    'email' => $input['email'],
-                    'password' => $input['password'],
-                    'role' => $input['role'],
-                    'restaurant_id' => $input['restaurant_id'],
-                    'avatar_url' => $input['avatar_url'] ?? null
-                ];
+                $cleanInput = ['email' => $input['email'], 'password' => $input['password'], 'role' => $input['role'], 'restaurant_id' => $input['restaurant_id'], 'avatar_url' => $input['avatar_url'] ?? null];
 
-                $isStored = User::createUser($cleanInput);
+                $result = User::createUser($cleanInput);
 
-                if ($isStored) {
+                if ($result['success']) {
 
-                    http_response_code(200);
-                    echo json_encode(['success' => true, 'message' => 'Usuario creado.']);
+                    http_response_code(201);
+
 
                 } else {
 
-                    http_response_code(500);
-                    echo json_encode(['success' => false, 'message' => 'Error al crear usuario.']);
+                    http_response_code($result['http_code']);
 
                 }
+
+                echo json_encode(['success' => $result['success'], 'message' => $result['message']]);
 
             }
 
@@ -60,7 +55,8 @@ class UserController
         exit;
     }
 
-    public function update($id): void {
+    public function updateWithoutRole($id): void
+    {
 
         header('Content-Type: application/json');
 
@@ -73,37 +69,33 @@ class UserController
 
         } else {
 
-            if (empty($input['email']) || empty($input['password']) || empty($input['restaurant_id']) || empty($input['role'])) {
+            if (empty($input['email']) || empty($input['password'])) {
 
                 http_response_code(400);
                 echo json_encode(['success' => false, 'message' => 'Bad request.']);
 
             } else {
 
-                $cleanInput = [
-                    'id' => $id,
-                    'email' => $input['email'],
-                    'password' => $input['password'],
-                    'role' => $input['role'],
-                    'restaurant_id' => $input['restaurant_id'],
-                    'avatar_url' => $input['avatar_url'] ?? null
-                ];
+                $cleanInput = ['id' => $id, 'email' => $input['email'], 'password' => $input['password'], 'avatar_url' => $input['avatar_url'] ?? null];
 
-                $isStored = User::updateUser($cleanInput);
+                $result = User::updateUser($cleanInput);
 
-                if ($isStored) {
+                if ($result['success']) {
 
                     http_response_code(200);
-                    echo json_encode(['success' => true, 'message' => 'Usuario actualizado.']);
 
                 } else {
 
-                    http_response_code(500);
-                    echo json_encode(['success' => false, 'message' => 'Error al actualizar usuario.']);
-                }
-                }
-            }
+                    http_response_code($result['http_code']);
 
+                }
+
+                echo json_encode(['success' => $result['success'], 'message' => $result['message']]);
+
+            }
+        }
+
+        exit;
 
     }
 }
