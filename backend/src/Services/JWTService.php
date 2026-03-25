@@ -47,9 +47,8 @@ class JwtService {
         $signature = hash_hmac('sha256', $base64UrlHeader . "." . $base64UrlPayload, self::$secret, true);
         $base64UrlSignature = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($signature));
 
-        // Comprobar si la firma que hemos calculado coincide con la del token
         if (!hash_equals($base64UrlSignature, $signatureProvided)) {
-            return false; // El token ha sido manipulado
+            return false;
         }
 
         // Decodificar el payload para leer los datos
