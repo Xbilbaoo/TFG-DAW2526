@@ -35,6 +35,31 @@ class User
         return false;
     }
 
+    public static function getUsers(): array
+    {
+
+        $connectionInstance = Database::getInstance();
+        $connection = $connectionInstance->getConnection();
+        $stmt = $connection->prepare('SELECT * FROM users');
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+
+        $users = [];
+
+        if ($result->num_rows > 0) {
+
+            while ($user = $result->fetch_assoc()) {
+
+                $users[] = $user;
+
+            }
+        }
+
+        return $users;
+
+    }
+
     public static function createUser($userData): array
     {
 
@@ -114,6 +139,28 @@ class User
 
             }
         }
+    }
+
+    public static function getUserById(int $id)
+    {
+
+        $connectionInstance = Database::getInstance();
+        $connection = $connectionInstance->getConnection();
+
+        $stmt = $connection->prepare('SELECT * FROM users WHERE user_id = ?');
+        $stmt->bind_param('i', $id);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+
+        $user = [];
+
+        while ($row = $result->fetch_assoc()) {
+
+            $user = $row;
+        }
+
+        return $user;
     }
 
 }

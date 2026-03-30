@@ -101,6 +101,7 @@ switch ($resource) {
             case 'PUT':
 
                 if ($id) {
+
                     $controller = new UserController();
 
                     if ($userData['role'] === 'admin') {
@@ -123,6 +124,24 @@ switch ($resource) {
                     echo json_encode(['success' => false, 'message' => 'Falta el ID del usuario en la URL.']);
                 }
                 break;
+
+            case 'GET':
+
+                $controller = new UserController();
+
+                if ($userData['role'] === 'admin') {
+
+
+                    $controller->getAllUsers();
+
+                } else {
+
+                    if ((int)$userData['user_id'] === (int)$id) {
+
+                        $controller->getUserById((int)$id);
+                    }
+                }
+
 
             default:
                 http_response_code(405);

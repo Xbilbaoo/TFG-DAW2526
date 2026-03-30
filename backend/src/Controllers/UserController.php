@@ -99,8 +99,46 @@ class UserController
 
     }
 
-    public function updateWholeUser(string $id)
+    public function getAllUsers(): void
     {
 
+        header('Content-Type: application/json');
+
+        $users = User::getUsers();
+
+        if (!$users) {
+
+            http_response_code(400);
+            echo json_encode(['success' => false, 'message' => 'Bad request.']);
+
+        } else {
+
+            http_response_code(200);
+            echo json_encode(['success' => true, 'users' => $users]);
+        }
+
+        exit;
+    }
+
+    public function getUserById(int $id)
+    {
+
+        header('Content-Type: application/json');
+
+        $user = User::getUserById($id);
+
+        if (!$user) {
+
+            http_response_code(400);
+            echo json_encode(['success' => false, 'message' => 'Bad request.']);
+
+        } else {
+
+            http_response_code(200);
+            echo json_encode(['success' => true, 'user' => $user]);
+
+        }
+
+        exit;
     }
 }
