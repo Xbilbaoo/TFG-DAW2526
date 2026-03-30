@@ -1,0 +1,6 @@
+### GET request to read details of a user
+GET http://localhost:8080/users/999
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzQ4NjA2NzEsImV4cCI6MTc3NDg2Nzg3MSwiZGF0YSI6eyJ1c2VyX2lkIjoyLCJlbWFpbCI6InVzZXJ0ZXN0QGV4YW1wbGUuY29tIiwicm9sZSI6ImFkbWluIn19.uMwnj-iiYmtofQECrttczl1tjsIlfStmwexn7LwmIoo
+
+###

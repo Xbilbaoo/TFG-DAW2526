@@ -1,0 +1,7 @@
+RewriteEngine On
+# Si la ruta pedida no es un archivo físico que exista...
+RewriteCond %{REQUEST_FILENAME} !-f
+# ...ni tampoco una carpeta física que exista...
+RewriteCond %{REQUEST_FILENAME} !-d
+# ...entonces redirige todo el tráfico a index.php
+RewriteRule ^(.*)$ index.php [QSA,L]

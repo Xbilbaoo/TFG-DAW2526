@@ -1,0 +1,10 @@
+### PUT request with an existing user
+PUT http://localhost:8080/users/9
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzQ0NTYxNzgsImV4cCI6MTc3NDQ2MzM3OCwiZGF0YSI6eyJ1c2VyX2lkIjo3LCJlbWFpbCI6InVzZXIxQGV4YW1wbGUxLmNvbSIsInJvbGUiOiJyZXN0YXVyYXRldXIifX0.vc2wpoJwvziFAXJqECwEMIUlP4M-XRaTf5pHMMdyDic
+
+{
+  "email": "usertest1@example.com",
+  "password": "1234abcd",
+  "avatar_url": "hola.png"
+}
+###

@@ -1,0 +1,13 @@
+### POST request to create a new user
+POST http://localhost:8080/users
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzQ0NDgwMzYsImV4cCI6MTc3NDQ1NTIzNiwiZGF0YSI6eyJ1c2VyX2lkIjo3LCJlbWFpbCI6InVzZXIxQGV4YW1wbGUxLmNvbSIsInJvbGUiOiJyZXN0YXVyYXRldXIifX0.4A4IWAGtncNfiq5L_O9fsk0wbnYqAmLIKBMOXtUyojc
+
+{
+  "email": "nuevo_empleado@email.com",
+  "password": "password123",
+  "role": "restaurateur",
+  "restaurant_id": 1,
+  "avatar_url": "https://miservidor.com/avatares/empleado1.jpg"
+}
+###
