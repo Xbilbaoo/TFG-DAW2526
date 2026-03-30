@@ -49,10 +49,7 @@ class UserController
                 echo json_encode(['success' => $result['success'], 'message' => $result['message']]);
 
             }
-
         }
-
-        exit;
     }
 
     public function updateWithoutRole($id): void
@@ -94,9 +91,6 @@ class UserController
 
             }
         }
-
-        exit;
-
     }
 
     public function getAllUsers(): void
@@ -116,11 +110,9 @@ class UserController
             http_response_code(200);
             echo json_encode(['success' => true, 'users' => $users]);
         }
-
-        exit;
     }
 
-    public function getUserById(int $id)
+    public function getUserById(int $id): void
     {
 
         header('Content-Type: application/json');
@@ -129,8 +121,8 @@ class UserController
 
         if (!$user) {
 
-            http_response_code(400);
-            echo json_encode(['success' => false, 'message' => 'Bad request.']);
+            http_response_code(404);
+            echo json_encode(['success' => false, 'message' => 'Usuario no encontrado.']);
 
         } else {
 
@@ -139,6 +131,29 @@ class UserController
 
         }
 
-        exit;
+    }
+
+    #[NoReturn]
+    public function deleteUser(int $id): void
+    {
+        header('Content-Type: application/json');
+
+        $result = User::deleteUserById($id);
+
+        if (!$result) {
+
+            http_response_code(404);
+            echo json_encode(['success' => false, 'message' => 'Usuario no encontrado.']);
+            exit;
+
+        } else {
+
+            http_response_code(200);
+            echo json_encode(['success' => true, 'message' => 'Usuario eliminado.']);
+            exit;
+
+        }
+
+
     }
 }

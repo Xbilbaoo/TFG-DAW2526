@@ -132,25 +132,53 @@ switch ($resource) {
                 if ($userData['role'] === 'admin') {
 
 
-                    $controller->getAllUsers();
+                    if ((int)$id) {
+
+                        $controller->getUserById((int)$id);
+
+                    } else {
+
+                        $controller->getAllUsers();
+
+                    }
+
+                } else if ((int)$userData['user_id'] === (int)$id) {
+
+                    $controller->getUserById((int)$id);
 
                 } else {
 
-                    if ((int)$userData['user_id'] === (int)$id) {
+                    if ((int)$id) {
 
-                        $controller->getUserById((int)$id);
+                        http_response_code(403);
+                        echo json_encode(['success' => false, 'message' => 'Solo puedes ver los detalles de tu perfil.']);
+
                     }
                 }
 
+                break;
 
-            default:
-                http_response_code(405);
-                echo json_encode(["message" => 'Método no permitido en esta ruta.']);
+            case 'DELETE':
+
+                if ($userData['role'] === 'admin' && (int)$id) {
+
+                    $controller = new UserController();
+                    $controller->deleteUser((int)$id);
+
+                } else {
+
+                    http_response_code(401);
+                    echo json_encode(['success' => false, 'message' => 'No tienes permisos.']);
+
+                }
+
                 break;
         }
 
     default:
 
+        http_response_code(405);
+        echo json_encode(["message" => 'Método no permitido en esta ruta.']);
+        break;
 
 }
-

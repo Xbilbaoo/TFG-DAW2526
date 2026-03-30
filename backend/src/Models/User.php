@@ -93,11 +93,12 @@ class User
                 return ['success' => false, 'message' => 'Error interno en la base de datos.', 'http_code' => 500];
 
             }
+
         }
 
     }
 
-    public static function updateUser(array $cleanInput)
+    public static function updateUser(array $cleanInput): array
     {
 
         $connectionInstance = Database::getInstance();
@@ -128,7 +129,7 @@ class User
 
             if ($e->getCode() === 1062) {
 
-               return ['success' => false, 'message' => 'El email ya esta registrado.', 'http_code' => 400];
+                return ['success' => false, 'message' => 'El email ya esta registrado.', 'http_code' => 400];
 
             } elseif ($e->getCode() === 1452) {
 
@@ -141,7 +142,7 @@ class User
         }
     }
 
-    public static function getUserById(int $id)
+    public static function getUserById(int $id): array
     {
 
         $connectionInstance = Database::getInstance();
@@ -161,6 +162,35 @@ class User
         }
 
         return $user;
+    }
+
+    public static function deleteUserById(int $id): bool
+    {
+
+        $connectionInstance = Database::getInstance();
+        $connection = $connectionInstance->getConnection();
+
+        $stmt = $connection->prepare('DELETE FROM users WHERE user_id = ?');
+        $stmt->bind_param('i', $id);
+        $stmt->execute();
+
+        if ($stmt->affected_rows === 0) {
+
+            $stmt->close();
+            return false;
+
+        }
+
+        if ($stmt->affected_rows === 1) {
+
+            $stmt->close();
+            return true;
+        } else {
+
+            $stmt->close();
+            return false;
+        }
+
     }
 
 }
