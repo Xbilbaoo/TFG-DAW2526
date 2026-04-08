@@ -6,7 +6,7 @@ use Models\User;
 use Services\JwtService;
 
 require_once __DIR__ . '/../Models/User.php';
-require_once __DIR__ . '/../Services/JwtService.php';
+require_once __DIR__ . '/../Services/JWTService.php';
 
 class AuthController
 {

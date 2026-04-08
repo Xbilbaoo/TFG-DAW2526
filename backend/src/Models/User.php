@@ -60,42 +60,32 @@ class User
 
     }
 
-    public static function createUser($userData): array
+    public static function createUser($userData)
     {
-
-        $connectionInstance = Database::getInstance();
-        $connection = $connectionInstance->getConnection();
-        $stmt = $connection->prepare('INSERT INTO users (email, password_hash, role, avatar_url, restaurant_id) VALUES (?,?,?,?,?)');
-
-        $password = password_hash($userData['password'], PASSWORD_DEFAULT);
-
-        $stmt->bind_param('ssssi', $userData['email'], $password, $userData['role'], $userData['avatar_url'], $userData['restaurant_id']);
-
         try {
+            $connectionInstance = Database::getInstance();
+            $connection = $connectionInstance->getConnection();
+            $stmt = $connection->prepare('INSERT INTO users (email, password_hash, role, avatar_url, restaurant_id) VALUES (?,?,?,?,?)');
+            $password = password_hash($userData['password'], PASSWORD_DEFAULT);
+
+            $stmt->bind_param('ssssi', $userData['email'], $password, $userData['role'], $userData['avatar_url'], $userData['restaurant_id']);
+
+
             $stmt->execute();
             $stmt->close();
-            return ['success' => true, 'message' => 'Usuario creado correctamente.'];
+
 
         } catch (\mysqli_sql_exception $e) {
-            error_log($e->getMessage());
-            $stmt->close();
 
             if ($e->getCode() === 1062) {
-
-                return ['success' => false, 'message' => 'El email introducido ya está registrado.', 'http_code' => 400];
-
+                // Lanzamos una excepción personalizada
+                throw new \Exception('El email ya está registrado.', 1062);
             } elseif ($e->getCode() === 1452) {
-
-                return ['success' => false, 'message' => 'El restaurante seleccionado no existe.', 'http_code' => 400];
-
+                throw new \Exception('El restaurante seleccionado no existe.', 1452);
             } else {
-
-                return ['success' => false, 'message' => 'Error interno en la base de datos.', 'http_code' => 500];
-
+                throw new \Exception('Error interno en la base de datos.', 500);
             }
-
         }
-
     }
 
     public static function updateUser(array $cleanInput): array

@@ -2,7 +2,6 @@
 
 namespace Controllers;
 
-use JetBrains\PhpStorm\NoReturn;
 use Models\User;
 
 require_once __DIR__ . '/../Models/User.php';
@@ -33,20 +32,26 @@ class UserController
 
                 $cleanInput = ['email' => $input['email'], 'password' => $input['password'], 'role' => $input['role'], 'restaurant_id' => $input['restaurant_id'], 'avatar_url' => $input['avatar_url'] ?? null];
 
-                $result = User::createUser($cleanInput);
+                try {
 
-                if ($result['success']) {
-
+                    User::createUser($cleanInput);
                     http_response_code(201);
+                    echo json_encode(['success' => true, 'message' => 'Usuario creado']);
+
+                } catch (\Exception $e) {
 
 
-                } else {
+                    $codigoHttp = match ($e->getCode()) {
+                        1062, 1452 => 400,
+                        default => 500,
+                    };
 
-                    http_response_code($result['http_code']);
-
+                    http_response_code($codigoHttp);
+                    echo json_encode([
+                        'success' => false,
+                        'message' => $e->getMessage()
+                    ]);
                 }
-
-                echo json_encode(['success' => $result['success'], 'message' => $result['message']]);
 
             }
         }
@@ -132,8 +137,6 @@ class UserController
         }
 
     }
-
-    #[NoReturn]
     public function deleteUser(int $id): void
     {
         header('Content-Type: application/json');

@@ -9,6 +9,8 @@ require_once __DIR__ . '/../src/Controllers/AuthController.php';
 require_once __DIR__ . '/../src/Controllers/UserController.php';
 require_once __DIR__ . '/../src/Services/JwtService.php';
 
+header('Content-Type: application/json');
+
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit();
@@ -173,7 +175,44 @@ switch ($resource) {
                 }
 
                 break;
+
+            default:
+
+                http_response_code(405);
+                echo json_encode(["message" => 'Método no permitido en esta ruta.']);
+                break;
+
         }
+
+    case 'menu':
+
+        $headers = apache_request_headers();
+        $authHeader = $headers['Authorization'] ?? $_SERVER['HTTP_AUTHORIZATION'] ?? null;
+
+        if (!$authHeader || !preg_match('/Bearer\s(\S+)/', $authHeader, $matches)) {
+            http_response_code(401);
+            echo json_encode(['success' => false, 'message' => 'Token no proporcionado o formato incorrecto.']);
+            exit;
+        }
+
+        $token = $matches[1];
+
+        $userData = JwtService::verifyToken($token);
+
+        if (!$userData) {
+
+            http_response_code(401);
+            echo json_encode(['success' => false, 'message' => 'Token inválido, manipulado o expirado.']);
+            exit;
+
+        }
+
+        switch ($method) {
+
+            case 'POST':
+
+        }
+
 
     default:
 
