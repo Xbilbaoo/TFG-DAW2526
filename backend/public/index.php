@@ -7,7 +7,7 @@ use Services\JwtService;
 
 require_once __DIR__ . '/../src/Controllers/AuthController.php';
 require_once __DIR__ . '/../src/Controllers/UserController.php';
-require_once __DIR__ . '/../src/Services/JwtService.php';
+require_once __DIR__ . '/../src/Services/JWTService.php';
 
 header('Content-Type: application/json');
 
