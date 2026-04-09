@@ -21,13 +21,16 @@ class Restaurant
             $stmt->execute();
             $stmt->close();
 
-        } catch (\mysqli_sql_exception $e) {
+        } catch (\mysqli_sql_exception) {
 
-            if ($e->getCode() === 1062) {
+            if (isset($stmt) && $stmt !== false) {
 
-                throw new \Exception('Duplicate entry');
+                $stmt->close();
 
             }
+
+            throw new \Exception('Error interno al crear el restaurante.', 500);
+
         }
     }
 }
