@@ -9,7 +9,7 @@ use Config\Database;
 class Restaurant
 {
 
-    public static function createRestaurant(array $data)
+    public static function create(array $data): void
     {
 
         try {
@@ -32,5 +32,32 @@ class Restaurant
             throw new \Exception('Error interno al crear el restaurante.', 500);
 
         }
+    }
+    public static function getRestaurants(): bool|array|null
+    {
+
+        $connectionInstance = Database::getInstance();
+        $connection = $connectionInstance->getConnection();
+        $stmt = $connection->prepare('SELECT * FROM restaurants');
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+
+            while ($restaurant = $result->fetch_assoc()) {
+
+                $restaurants[] = $restaurant;
+
+            }
+
+            return $restaurants;
+
+        } else {
+
+            return false;
+
+        }
+
     }
 }

@@ -2,11 +2,13 @@
 
 
 use Controllers\AuthController;
+use Controllers\RestaurantController;
 use Controllers\UserController;
 use Services\JwtService;
 
 require_once __DIR__ . '/../src/Controllers/AuthController.php';
 require_once __DIR__ . '/../src/Controllers/UserController.php';
+require_once __DIR__ . '/../src/Controllers/RestaurantController.php';
 require_once __DIR__ . '/../src/Services/JWTService.php';
 
 header('Content-Type: application/json');
@@ -184,7 +186,7 @@ switch ($resource) {
 
         }
 
-    case 'menu':
+    case 'restaurants':
 
         $headers = apache_request_headers();
         $authHeader = $headers['Authorization'] ?? $_SERVER['HTTP_AUTHORIZATION'] ?? null;
@@ -211,8 +213,30 @@ switch ($resource) {
 
             case 'POST':
 
+                $controller = new RestaurantController();
+                $controller->createRestaurant();
+                break;
+
+            case 'GET':
+
+                $controller = new RestaurantController();
+
+                if ($userData['role'] === 'admin') {
+
+                    $controller->getAllRestaurants();
+
+                } else {
+
+                    http_response_code(403);
+                    echo json_encode(['success' => false, 'message' => 'No tienes permisos para realizar esta acción.']);
+
+                }
+
+                break;
+
         }
 
+        break;
 
     default:
 

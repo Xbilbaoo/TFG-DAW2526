@@ -1,0 +1,13 @@
+### GET request to create a restaurant as Admin
+POST http://localhost:8080/restaurants
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzU3NDU5MTUsImV4cCI6MTc3NTc1MzExNSwiZGF0YSI6eyJ1c2VyX2lkIjoyLCJlbWFpbCI6InVzZXJ0ZXN0QGV4YW1wbGUuY29tIiwicm9sZSI6ImFkbWluIn19.2L7BIYrAYLQvX52Q05YTaSD781S-Rk3s1-levAMTg_M
+
+{
+  "name": "Ristorante test",
+  "address": "Via Roma 123",
+  "phone": "123456789",
+  "logo_url": "",
+  "primary_color": "#FFFFFF"
+}
+###
