@@ -88,7 +88,7 @@ class User
         }
     }
 
-    public static function updateUser(array $cleanInput): array
+    public static function updateUserNoRole(array $cleanInput): array
     {
 
         $connectionInstance = Database::getInstance();
@@ -181,6 +181,50 @@ class User
             return false;
         }
 
+    }
+
+    public static function updateUser(array $cleanInput)
+    {
+
+        $connectionInstance = Database::getInstance();
+        $connection = $connectionInstance->getConnection();
+
+        $password = password_hash($cleanInput['password'], PASSWORD_DEFAULT);
+        $stmt = $connection->prepare('UPDATE users SET email = ?, password_hash = ?, avatar_url = ? WHERE user_id = ?');
+
+        $stmt->bind_param('sssi', $cleanInput['email'], $password, $cleanInput['avatar_url'], $cleanInput['id']);
+
+        try {
+
+            $stmt->execute();
+
+            if ($stmt->affected_rows === 0) {
+
+                throw new \Exception('Restaurante no encontrado.', 404);
+
+            }
+
+            $stmt->close();
+            return true;
+
+        } catch (\mysqli_sql_exception $e) {
+
+            $stmt->close();
+
+            if ($e->getCode() === 1062) {
+
+                throw new \Exception('El email ya esta registrado.', 1062);
+
+            } elseif ($e->getCode() === 1452) {
+
+                throw new \Exception('El restaurante seleccionado no existe.', 1452);
+
+            } else {
+
+                throw new \Exception('Error interno en la base de datos.', 500);
+
+            }
+        }
     }
 
 }

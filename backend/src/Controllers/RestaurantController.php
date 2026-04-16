@@ -81,4 +81,11 @@ class RestaurantController
         }
 
     }
+
+    public function deleteRestaurant(int $id)
+    {
+        header('Content-Type: application/json');
+
+    }
+
 }

@@ -1,5 +1,4 @@
-### GET request to example server
+### GET requuest to see all restaurants on the DB
 GET http://localhost:8080/restaurants
 Content-Type: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzYxNzEwODIsImV4cCI6MTc3NjE3ODI4MiwiZGF0YSI6eyJ1c2VyX2lkIjoyLCJlbWFpbCI6InVzZXJ0ZXN0QGV4YW1wbGUuY29tIiwicm9sZSI6ImFkbWluIn19.Olt8P2l2aTAIStzGA3ERMXgkfhyR8lgL9L_dBEvUnPc
-###

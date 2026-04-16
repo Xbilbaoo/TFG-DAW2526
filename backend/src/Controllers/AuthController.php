@@ -36,7 +36,9 @@ class AuthController
                 $cleanPayload = [
                     'user_id' => $user['user_id'],
                     'email' => $user['email'],
-                    'role' => $user['role']
+                    'role' => $user['role'],
+                    'restaurant_id' => $user['restaurant_id']
+
                 ];
 
                 $token = JwtService::generateToken($cleanPayload);

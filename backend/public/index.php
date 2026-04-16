@@ -186,6 +186,8 @@ switch ($resource) {
 
         }
 
+        break;
+
     case 'restaurants':
 
         $headers = apache_request_headers();
@@ -214,7 +216,17 @@ switch ($resource) {
             case 'POST':
 
                 $controller = new RestaurantController();
-                $controller->createRestaurant();
+                if ($userData['role'] === 'admin') {
+
+                    $controller->createRestaurant();
+
+                } else {
+
+                    http_response_code(403);
+                    echo json_encode(['success' => false, 'message' => 'No tienes permisos para realizar esta acción.']);
+
+                }
+
                 break;
 
             case 'GET':
@@ -233,6 +245,33 @@ switch ($resource) {
                 }
 
                 break;
+
+                case 'DELETE':
+
+                    $controller = new RestaurantController();
+
+                    if ($userData['role'] === 'admin') {
+
+                        if ((int)$userData['restaurant_id'] === (int)$id) {
+
+                            http_response_code(403);
+                            echo json_encode(['success' => false, 'message' => 'No se puede borrar tu propio restaurante.']);
+
+                        } else {
+
+                            $controller->deleteRestaurant((int)$id);
+
+
+                        }
+
+                    } else {
+
+                        http_response_code(401);
+                        echo json_encode(['success' => false, 'message' => 'No tienes permisos para realizar esta accion']);
+
+                    }
+
+                    break;
 
         }
 
