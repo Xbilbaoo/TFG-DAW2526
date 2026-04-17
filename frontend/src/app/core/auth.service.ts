@@ -9,7 +9,7 @@ import { StorageService } from './storage.service';
 })
 export class AuthService {
 
-  private apiUrl = 'http://localhost/gozkoetxe-api/auth';
+  private apiUrl = 'http://localhost/api/auth';
 
   constructor(
     private http: HttpClient,
