@@ -105,7 +105,7 @@ class User
 
             if ($stmt->affected_rows === 0) {
 
-                return ['success' => false, 'message' => 'Usuario no encontrado.', 'http_code' => 404];
+                throw new \Exception('No se encontro ningun usuario', 404);
 
             }
 
@@ -114,19 +114,18 @@ class User
 
         } catch (\mysqli_sql_exception $e) {
 
-            error_log($e->getMessage());
             $stmt->close();
 
             if ($e->getCode() === 1062) {
 
-                return ['success' => false, 'message' => 'El email ya esta registrado.', 'http_code' => 400];
+                throw new \Exception('Ese email ya esta registrado.', 1062);
 
             } elseif ($e->getCode() === 1452) {
 
-                return ['success' => false, 'message' => 'El restaurante seleccionado no existe.', 'http_code' => 400];
+                throw new \Exception('El restaurante seleccionado no existe.', 1452);
             } else {
 
-                return ['success' => false, 'message' => 'Error interno en la base de datos.', 'http_code' => 500];
+                throw new \Exception('Error interno en la base de datos.', 500);
 
             }
         }
@@ -183,7 +182,7 @@ class User
 
     }
 
-    public static function updateUser(array $cleanInput)
+    public static function updateUser(array $cleanInput): bool
     {
 
         $connectionInstance = Database::getInstance();
@@ -200,7 +199,7 @@ class User
 
             if ($stmt->affected_rows === 0) {
 
-                throw new \Exception('Restaurante no encontrado.', 404);
+                throw new \Exception('Usuario no encontrado.', 404);
 
             }
 
@@ -226,5 +225,4 @@ class User
             }
         }
     }
-
 }

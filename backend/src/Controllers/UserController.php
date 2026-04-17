@@ -80,25 +80,32 @@ class UserController
 
                 $cleanInput = ['id' => $id, 'email' => $input['email'], 'password' => $input['password'], 'avatar_url' => $input['avatar_url'] ?? null];
 
-                $result = User::updateUserNoRole($cleanInput);
+                try {
 
-                if ($result['success']) {
+                    User::updateUserNoRole($cleanInput);
+                    http_response_code(201);
+                    echo json_encode(['success' => true, 'message' => 'Usuario actualizado']);
 
-                    http_response_code(200);
+                } catch (\Exception $e) {
 
-                } else {
+                    $codigoHttp = match ($e->getCode()) {
+                        1062, 1452 => 400,
+                        404 => 404,
+                        default => 500,
 
-                    http_response_code($result['http_code']);
+                    };
+
+                    http_response_code($codigoHttp);
+                    echo json_encode(['success' => false, 'message' => $e->getMessage()]);
 
                 }
-
-                echo json_encode(['success' => $result['success'], 'message' => $result['message']]);
-
             }
+
         }
     }
 
-    public function getAllUsers(): void
+    public
+    function getAllUsers(): void
     {
 
         header('Content-Type: application/json');
@@ -117,7 +124,8 @@ class UserController
         }
     }
 
-    public function getUserById(int $id): void
+    public
+    function getUserById(int $id): void
     {
 
         header('Content-Type: application/json');
@@ -138,7 +146,8 @@ class UserController
 
     }
 
-    public function deleteUser(int $id): void
+    public
+    function deleteUser(int $id): void
     {
         header('Content-Type: application/json');
 
@@ -161,7 +170,8 @@ class UserController
 
     }
 
-    public function updateWholeUser(string $id): void
+    public
+    function updateWholeUser(string $id): void
     {
 
         header('Content-Type: application/json');
