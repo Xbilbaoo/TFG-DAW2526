@@ -7,10 +7,10 @@ class Database
     private $connection;
 
     private function __construct(){
-        $host = 'base-datos';
-        $user = 'root';
-        $password = 'root';
-        $dbName = 'tfgDAW2526';
+        $host = getenv('DB_HOST') ?: 'base-datos';
+        $user = getenv('DB_USER') ?: 'root';
+        $password = getenv('DB_PASS') ?: 'root';
+        $dbName = getenv('DB_NAME') ?: 'tfgDAW2526';
 
         mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
         $this->connection = new \mysqli($host, $user, $password, $dbName);

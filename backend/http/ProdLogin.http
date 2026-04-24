@@ -1,0 +1,7 @@
+POST https://tfg-daw2526.onrender.com/login
+Content-Type: application/json
+
+{
+  "email": "tu_usuario_admin@ejemplo.com",
+  "password": "tu_password"
+}

@@ -5,7 +5,11 @@ namespace Services;
 
 
 class JwtService {
-    private static $secret = 'Clave_Secreta_Super_Segura_TFG_DAW_2026';
+    private static $secret = null;
+
+    public static function getSecret() {
+        return getenv('JWT_SECRET') ?: 'Clave_Secreta_Super_Segura_TFG_DAW_2026';
+    }
     public static function generateToken($userData) {
 
         $header = json_encode(['typ' => 'JWT', 'alg' => 'HS256']);
@@ -23,7 +27,7 @@ class JwtService {
         $base64UrlHeader = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($header));
         $base64UrlPayload = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($payload));
 
-        $signature = hash_hmac('sha256', $base64UrlHeader . "." . $base64UrlPayload, self::$secret, true);
+        $signature = hash_hmac('sha256', $base64UrlHeader . "." . $base64UrlPayload, self::getSecret(), true);
 
         $base64UrlSignature = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($signature));
 
@@ -44,7 +48,7 @@ class JwtService {
         $base64UrlPayload = $tokenParts[1];
         $signatureProvided = $tokenParts[2];
 
-        $signature = hash_hmac('sha256', $base64UrlHeader . "." . $base64UrlPayload, self::$secret, true);
+        $signature = hash_hmac('sha256', $base64UrlHeader . "." . $base64UrlPayload, self::getSecret(), true);
         $base64UrlSignature = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($signature));
 
         if (!hash_equals($base64UrlSignature, $signatureProvided)) {
