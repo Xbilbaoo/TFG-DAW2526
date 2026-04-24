@@ -20,44 +20,46 @@ class UserController
 
             http_response_code(400);
             echo json_encode(['success' => false, 'message' => 'Bad request.']);
+            return;
+
+        }
+
+        if (empty($input['email']) || empty($input['password']) || empty($input['restaurant_id']) || empty($input['role'])) {
+
+            http_response_code(400);
+            echo json_encode(['success' => false, 'message' => 'Bad request.']);
+            return;
 
         } else {
 
-            if (empty($input['email']) || empty($input['password']) || empty($input['restaurant_id']) || empty($input['role'])) {
+            $cleanInput = ['email' => $input['email'], 'password' => $input['password'], 'role' => $input['role'], 'restaurant_id' => $input['restaurant_id'], 'avatar_url' => $input['avatar_url'] ?? null];
 
-                http_response_code(400);
-                echo json_encode(['success' => false, 'message' => 'Bad request.']);
+            try {
 
-            } else {
+                User::createUser($cleanInput);
+                http_response_code(201);
+                echo json_encode(['success' => true, 'message' => 'Usuario creado']);
 
-                $cleanInput = ['email' => $input['email'], 'password' => $input['password'], 'role' => $input['role'], 'restaurant_id' => $input['restaurant_id'], 'avatar_url' => $input['avatar_url'] ?? null];
-
-                try {
-
-                    User::createUser($cleanInput);
-                    http_response_code(201);
-                    echo json_encode(['success' => true, 'message' => 'Usuario creado']);
-
-                } catch (\Exception $e) {
+            } catch (\Exception $e) {
 
 
-                    $codigoHttp = match ($e->getCode()) {
-                        1062, 1452 => 400,
-                        default => 500,
-                    };
+                $codigoHttp = match ($e->getCode()) {
+                    1062, 1452 => 400,
+                    default => 500,
+                };
 
-                    http_response_code($codigoHttp);
-                    echo json_encode([
-                        'success' => false,
-                        'message' => $e->getMessage()
-                    ]);
-                }
-
+                http_response_code($codigoHttp);
+                echo json_encode([
+                    'success' => false,
+                    'message' => $e->getMessage()
+                ]);
             }
+
         }
     }
 
-    public function updateWithoutRole($id): void
+    public
+    function updateWithoutRole($id): void
     {
 
         header('Content-Type: application/json');

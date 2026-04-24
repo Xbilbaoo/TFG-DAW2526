@@ -61,7 +61,7 @@ class RestaurantController
 
     }
 
-    public function getAllRestaurants()
+    public function getAllRestaurants(): void
     {
 
         header('Content-Type: application/json');
@@ -82,10 +82,36 @@ class RestaurantController
 
     }
 
-    public function deleteRestaurant(int $id)
+    public function deleteRestaurant(int $id): void
     {
         header('Content-Type: application/json');
 
+        try {
+            
+            $deleted = Restaurant::deleteRestaurantById($id);
+
+            if ($deleted) {
+
+                http_response_code(200);
+                echo json_encode(['success' => true, 'message' => 'Restaurante eliminado correctamente.']);
+
+            } else {
+
+                http_response_code(404);
+                echo json_encode(['success' => false, 'message' => 'El restaurante que intentas borrar no existe.']);
+
+            }
+
+        } catch (\Exception $e) {
+
+            if ($e->getCode() == 1451) {
+                http_response_code(409);
+            } else {
+                http_response_code(500);
+            }
+
+            echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+        }
     }
 
 }

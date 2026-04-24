@@ -1,13 +1,5 @@
-### POST request to create a new user
-POST http://localhost:8080/users
+### DELTE request to the endpoint "restaurants"
+DELETE http://localhost:8080/restaurants/3
 Content-Type: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzcwMjA4MjEsImV4cCI6MTc3NzAyODAyMSwiZGF0YSI6eyJ1c2VyX2lkIjoyLCJlbWFpbCI6InVzZXJ0ZXN0QGV4YW1wbGUuY29tIiwicm9sZSI6ImFkbWluIiwicmVzdGF1cmFudF9pZCI6MX19.iQ-p2CecI5arn-5GGJUqOUWxUtckRgnna-yq3wel6UI
-
-{
-  "email": "nuevo_empleado2@email.com",
-  "password": "password123",
-  "role": "restaurateur",
-  "restaurant_id": 3,
-  "avatar_url": "https://miservidor.com/avatares/empleado1.jpg"
-}
 ###

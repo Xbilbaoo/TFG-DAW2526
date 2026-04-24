@@ -33,7 +33,8 @@ class Restaurant
 
         }
     }
-    public static function getRestaurants(): bool|array|null
+
+    public static function getRestaurants(): bool|array
     {
 
         $connectionInstance = Database::getInstance();
@@ -44,6 +45,8 @@ class Restaurant
         $result = $stmt->get_result();
 
         if ($result->num_rows > 0) {
+
+            $restaurants = [];
 
             while ($restaurant = $result->fetch_assoc()) {
 
@@ -59,5 +62,46 @@ class Restaurant
 
         }
 
+    }
+
+    public static function deleteRestaurantById(int $id)
+    {
+        $connectionInstance = Database::getInstance();
+        $connection = $connectionInstance->getConnection();
+        $stmt = $connection->prepare('DELETE FROM restaurants WHERE restaurant_id = ?');
+        $stmt->bind_param('i', $id);
+
+        try {
+
+            $stmt->execute();
+
+            if ($stmt->affected_rows === 1) {
+
+                $stmt->close();
+                return true;
+
+            } else {
+
+                $stmt->close();
+                return false;
+
+            }
+
+        } catch (\mysqli_sql_exception $e) {
+
+            if (isset($stmt) && $stmt !== false) {
+                $stmt->close();
+            }
+
+            if($e->getCode() == 1451) {
+
+                throw new \Exception('No se puede eliminar este restaurente. Hay datos vinculados a este restaurante.', 1451);
+
+            } else {
+
+                throw new \Exception('Error interno del servidor.', 500);
+
+            }
+        }
     }
 }
