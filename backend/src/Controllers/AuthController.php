@@ -36,7 +36,9 @@ class AuthController
                 $cleanPayload = [
                     'user_id' => $user['user_id'],
                     'email' => $user['email'],
-                    'role' => $user['role']
+                    'role' => $user['role'],
+                    'restaurant_id' => $user['restaurant_id']
+
                 ];
 
                 $token = JwtService::generateToken($cleanPayload);
@@ -53,7 +55,7 @@ class AuthController
 
             }
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
 
             http_response_code(500);
             echo json_encode(['success' => false, 'message' => 'Error interno del servidor: ' . $e->getMessage()]);

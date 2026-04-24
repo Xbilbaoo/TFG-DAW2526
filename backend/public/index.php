@@ -2,11 +2,13 @@
 
 
 use Controllers\AuthController;
+use Controllers\RestaurantController;
 use Controllers\UserController;
 use Services\JwtService;
 
 require_once __DIR__ . '/../src/Controllers/AuthController.php';
 require_once __DIR__ . '/../src/Controllers/UserController.php';
+require_once __DIR__ . '/../src/Controllers/RestaurantController.php';
 require_once __DIR__ . '/../src/Services/JWTService.php';
 
 header('Content-Type: application/json');
@@ -184,7 +186,9 @@ switch ($resource) {
 
         }
 
-    case 'menu':
+        break;
+
+    case 'restaurants':
 
         $headers = apache_request_headers();
         $authHeader = $headers['Authorization'] ?? $_SERVER['HTTP_AUTHORIZATION'] ?? null;
@@ -211,8 +215,67 @@ switch ($resource) {
 
             case 'POST':
 
+                $controller = new RestaurantController();
+                if ($userData['role'] === 'admin') {
+
+                    $controller->createRestaurant();
+
+                } else {
+
+                    http_response_code(403);
+                    echo json_encode(['success' => false, 'message' => 'No tienes permisos para realizar esta acción.']);
+
+                }
+
+                break;
+
+            case 'GET':
+
+                $controller = new RestaurantController();
+
+                if ($userData['role'] === 'admin') {
+
+                    $controller->getAllRestaurants();
+
+                } else {
+
+                    http_response_code(403);
+                    echo json_encode(['success' => false, 'message' => 'No tienes permisos para realizar esta acción.']);
+
+                }
+
+                break;
+
+                case 'DELETE':
+
+                    $controller = new RestaurantController();
+
+                    if ($userData['role'] === 'admin') {
+
+                        if ((int)$userData['restaurant_id'] === (int)$id) {
+
+                            http_response_code(403);
+                            echo json_encode(['success' => false, 'message' => 'No se puede borrar tu propio restaurante.']);
+
+                        } else {
+
+                            $controller->deleteRestaurant((int)$id);
+
+
+                        }
+
+                    } else {
+
+                        http_response_code(401);
+                        echo json_encode(['success' => false, 'message' => 'No tienes permisos para realizar esta accion']);
+
+                    }
+
+                    break;
+
         }
 
+        break;
 
     default:
 
